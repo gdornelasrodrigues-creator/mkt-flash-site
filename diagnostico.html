@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Flash - MKT Flash</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --color-primary: #f97316;
+            --color-secondary: #fb923c;
+            --color-light: #fff7ed;
+            --color-accent: #fed7aa;
+            --color-dark: #9a3412;
+            --color-text: #333;
+            --color-white: #fff;
+            --color-gray: #eee;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--color-white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--color-primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            background-color: var(--color-light);
+        }
+
+        .form-section h2 {
+            color: var(--color-dark);
+            margin-top: 0;
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-dark);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid var(--color-accent);
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .rating-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .rating-group label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .rating-group input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .rating-group input[type="radio"]:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        button {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: var(--color-dark);
+        }
+
+        #results-section {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            border: 1px solid var(--color-secondary);
+            border-radius: 8px;
+            background-color: var(--color-white);
+            text-align: center;
+        }
+
+        #results-section h2 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+        }
+
+        #results-section p {
+            margin-bottom: 20px;
+        }
+
+        #myChart {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+            color: var(--color-white);
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1DA851;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            button {
+                font-size: 1em;
+                padding: 12px 20px;
+            }
+
+            .rating-group {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .rating-group label {
+                margin: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/logo_mkt_flash.png" alt="MKT Flash Logo">
+            <h1>Diagnóstico Flash</h1>
+            <p>Descubra os pontos fortes e fracos do seu pequeno negócio no marketing em poucos minutos!</p>
+        </header>
+
+        <form id="diagnostic-form">
+            <div class="form-section">
+                <h2>Seus Dados</h2>
+                <div class="form-group">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp:</label>
+                    <input type="tel" id="whatsapp" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Pilar 1: Persona e Público-Alvo</h2>
+                <div class="form-group">
+                    <label>1. Você tem clareza sobre quem é seu cliente ideal (idade, interesses, dores)?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q1" value="1" required> 1 <br>Nada Claro</label>
+                        <label><input type="radio" name="q1" value="2"> 2</label>
+                        <label><input type="radio" name="q1" value="3"> 3</label>
+                        <label><input type="radio" name="q1" value="4"> 4</label>
+                        <label><input type="radio" name="q1" value="5"> 5 <br>Muito Claro</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>2. Você adapta sua comunicação para falar diretamente com seu público?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q2" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q2" value="2"> 2</label>
+                        <label><input type="radio" name="q2" value="3"> 3</label>
+                        <label><input type="radio" name="q2" value="4"> 4</label>
+                        <label><input type="radio" name="q2" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Pilar 2: Identidade da Marca</h2>
+                <div class="form-group">
+                    <label>3. Sua marca possui um logo profissional e memorável?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q3" value="1" required> 1 <br>Não</label>
+                        <label><input type="radio" name="q3" value="2"> 2</label>
+                        <label><input type="radio" name="q3" value="3"> 3</label>
+                        <label><input type="radio" name="q3" value="4"> 4</label>
+                        <label><input type="radio" name="q3" value="5"> 5 <br>Sim, excelente</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>4. As cores, fontes e estilo visual da sua marca são consistentes em todos os canais?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q4" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q4" value="2"> 2</label>
+                        <label><input type="radio" name="q4" value="3"> 3</label>
+                        <label><input type="radio" name="q4" value="4"> 4</label>
+                        <label><input type="radio" name="q4" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Pilar 3: Comunicação e Conteúdo</h2>
+                <div class="form-group">
+                    <label>5. Você publica conteúdo relevante e de valor para seu público regularmente?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q5" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q5" value="2"> 2</label>
+                        <label><input type="radio" name="q5" value="3"> 3</label>
+                        <label><input type="radio" name="q5" value="4"> 4</label>
+                        <label><input type="radio" name="q5" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>6. Você interage com seus seguidores e responde a comentários/mensagens?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q6" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q6" value="2"> 2</label>
+                        <label><input type="radio" name="q6" value="3"> 3</label>
+                        <label><input type="radio" name="q6" value="4"> 4</label>
+                        <label><input type="radio" name="q6" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Pilar 4: Captação de Clientes</h2>
+                <div class="form-group">
+                    <label>7. Você utiliza anúncios pagos (ex: Google Ads, Meta Ads) para atrair novos clientes?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q7" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q7" value="2"> 2</label>
+                        <label><input type="radio" name="q7" value="3"> 3</label>
+                        <label><input type="radio" name="q7" value="4"> 4</label>
+                        <label><input type="radio" name="q7" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>8. Seu negócio possui uma presença online (site, perfil no Google Meu Negócio) otimizada para buscas?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q8" value="1" required> 1 <br>Não</label>
+                        <label><input type="radio" name="q8" value="2"> 2</label>
+                        <label><input type="radio" name="q8" value="3"> 3</label>
+                        <label><input type="radio" name="q8" value="4"> 4</label>
+                        <label><input type="radio" name="q8" value="5"> 5 <br>Sim, muito</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Pilar 5: Fidelização de Clientes</h2>
+                <div class="form-group">
+                    <label>9. Você tem estratégias para incentivar clientes a retornarem (ex: programas de fidelidade, ofertas exclusivas)?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q9" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q9" value="2"> 2</label>
+                        <label><input type="radio" name="q9" value="3"> 3</label>
+                        <label><input type="radio" name="q9" value="4"> 4</label>
+                        <label><input type="radio" name="q9" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>10. Você coleta feedback dos clientes e usa para melhorar seu negócio?</label>
+                    <div class="rating-group">
+                        <label><input type="radio" name="q10" value="1" required> 1 <br>Nunca</label>
+                        <label><input type="radio" name="q10" value="2"> 2</label>
+                        <label><input type="radio" name="q10" value="3"> 3</label>
+                        <label><input type="radio" name="q10" value="4"> 4</label>
+                        <label><input type="radio" name="q10" value="5"> 5 <br>Sempre</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Gerar Diagnóstico</button>
+        </form>
+
+        <div id="results-section">
+            <h2>Seu Diagnóstico Flash está pronto!</h2>
+            <p>Veja como seu negócio se posiciona em cada pilar do marketing:</p>
+            <canvas id="myChart"></canvas>
+            <p>Seu diagnóstico está pronto! Vamos juntos transformar o seu negócio. Nossos planos estratégicos começam em apenas R$99. Clique no botão abaixo e fale agora com nossa equipe.</p>
+            <a href="https://wa.me/5511947288394" target="_blank" class="whatsapp-button">Fale com nossa equipe no WhatsApp</a>
+        </div>
+    </div>
+
+    <script>
+        // URL do seu Google Apps Script Web App (substitua pelo seu)
+        const WEB_APP_URL = 'SUA_URL_DO_GOOGLE_APPS_SCRIPT_WEB_APP'; 
+
+        document.getElementById('diagnostic-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+
+            const questions = [
+                { id: 'q1', pillar: 'Persona e Público-Alvo' },
+                { id: 'q2', pillar: 'Persona e Público-Alvo' },
+                { id: 'q3', pillar: 'Identidade da Marca' },
+                { id: 'q4', pillar: 'Identidade da Marca' },
+                { id: 'q5', pillar: 'Comunicação e Conteúdo' },
+                { id: 'q6', pillar: 'Comunicação e Conteúdo' },
+                { id: 'q7', pillar: 'Captação de Clientes' },
+                { id: 'q8', pillar: 'Captação de Clientes' },
+                { id: 'q9', pillar: 'Fidelização de Clientes' },
+                { id: 'q10', pillar: 'Fidelização de Clientes' }
+            ];
+
+            const answers = {};
+            const pillarScores = {
+                'Persona e Público-Alvo': [],
+                'Identidade da Marca': [],
+                'Comunicação e Conteúdo': [],
+                'Captação de Clientes': [],
+                'Fidelização de Clientes': []
+            };
+
+            questions.forEach(q => {
+                const value = parseInt(document.querySelector(`input[name="${q.id}"]:checked`).value);
+                answers[q.id] = value;
+                pillarScores[q.pillar].push(value);
+            });
+
+            const pillarAverages = {};
+            let lowestPillar = '';
+            let lowestAverage = 5.1; // Maior que o máximo possível
+
+            for (const pillar in pillarScores) {
+                const sum = pillarScores[pillar].reduce((a, b) => a + b, 0);
+                const average = sum / pillarScores[pillar].length;
+                pillarAverages[pillar] = parseFloat(average.toFixed(2));
+
+                if (average < lowestAverage) {
+                    lowestAverage = average;
+                    lowestPillar = pillar;
+                }
+            }
+
+            // Enviar dados para o Google Apps Script
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Necessário para evitar erros CORS com Apps Script
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'submitDiagnostic',
+                        name: name,
+                        email: email,
+                        whatsapp: whatsapp,
+                        answers: JSON.stringify(answers),
+                        pillarAverages: JSON.stringify(pillarAverages),
+                        lowestPillar: lowestPillar
+                    })
+                });
+                // Como 'no-cors' não permite ler a resposta, assumimos sucesso
+                console.log('Dados enviados para o Google Apps Script.');
+            } catch (error) {
+                console.error('Erro ao enviar dados para o Google Apps Script:', error);
+            }
+
+            // Exibir resultados e gráfico
+            document.getElementById('diagnostic-form').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(pillarAverages),
+                    datasets: [{
+                        label: 'Sua Pontuação Média',
+                        data: Object.values(pillarAverages),
+                        backgroundColor: 'rgba(249, 115, 22, 0.6)',
+                        borderColor: 'rgba(249, 115, 22, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(249, 115, 22, 1)'
+                    }, {
+                        label: 'Ideal (Pontuação 5)',
+                        data: [5, 5, 5, 5, 5],
+                        backgroundColor: 'rgba(154, 52, 18, 0.2)',
+                        borderColor: 'rgba(154, 52, 18, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(154, 52, 18, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1,
+                                color: '#555'
+                            },
+                            pointLabels: {
+                                color: '#333',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
