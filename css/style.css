@@ -887,3 +887,11 @@ h1, h2, h3 {
     }
 }
 
+
+
+@media (max-width: 768px) {
+    .about h2 {
+        font-size: 1.5rem; /* Tamanho da fonte menor para dispositivos móveis */
+    }
+}
+
