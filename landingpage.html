@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MKT Flash • Consultoria de Marketing para Pequenos Negócios</title>
+  <meta name="description" content="Plano Otimizado (R$ 199, entrega em 24h) e Plano com Especialista (R$ 499, inclui 2 reuniões e Plano de Marketing). Garantia 30 dias sem perguntas.">
+  <style>
+    /* =========================
+       PALETA, TOKENS E RESET
+       ========================= */
+    :root{
+      --orange-600:#f97316;
+      --orange-400:#fb923c;
+      --orange-50:#fff7ed;
+      --orange-200:#fed7aa;
+      --orange-900:#9a3412;
+      --ink:#0f172a;
+      --ink-2:#334155;
+      --ink-3:#64748b;
+      --bg:#ffffff;
+      --ok:#16a34a;
+      --danger:#dc2626;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Inter,Arial,sans-serif;line-height:1.45}
+    img{max-width:100%;height:auto}
+    a{color:var(--orange-900);text-decoration:underline}
+    .container{max-width:1120px;margin:0 auto;padding:24px}
+    .btn{
+      display:inline-block;border:0;border-radius:14px;padding:14px 22px;
+      background:linear-gradient(135deg,var(--orange-600),var(--orange-400));
+      color:#fff;font-weight:700;text-decoration:none;cursor:pointer;box-shadow:0 8px 22px rgba(249,115,22,.25);
+      transition:transform .06s ease, filter .2s ease;
+    }
+    .btn:hover{transform:translateY(-2px);filter:saturate(1.05)}
+    .btn.secondary{background:#fff;color:var(--orange-900);border:2px solid var(--orange-200);box-shadow:none}
+    .btn.ghost{background:transparent;color:var(--orange-900);border:2px dashed var(--orange-200)}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:var(--orange-50);color:var(--orange-900);font-weight:600;font-size:.85rem}
+    .grid{display:grid;gap:20px}
+    .shadow{box-shadow:0 8px 24px rgba(2,6,23,.08)}
+    .card{background:#fff;border:1px solid #eee;border-radius:18px;padding:22px}
+    .muted{color:var(--ink-3)}
+    .accent{color:var(--orange-900)}
+    .center{text-align:center}
+    header.sticky{position:sticky;top:0;background:#fff;z-index:50;border-bottom:1px solid #f1f5f9}
+
+    /* HERO + GARANTIA */
+    .hero{background:linear-gradient(180deg,var(--orange-50),#fff);padding:28px 0 8px}
+    .hero-grid{display:grid;gap:28px;grid-template-columns:1.1fr .9fr;align-items:center}
+    .hero h1{font-size:clamp(28px,4vw,44px);margin:6px 0}
+    .hero p{font-size:clamp(16px,1.5vw,19px)}
+    .logo-wrap{display:flex;align-items:center;gap:12px}
+    .logo{width:160px;height:auto;object-fit:contain}
+    .trust-badges{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+    .trust-badges .badge{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #eee;border-radius:12px;padding:8px 12px}
+    .guarantee{
+      display:inline-flex;gap:10px;align-items:center;margin-top:10px;
+      background:#fff;border:2px solid var(--orange-200);border-radius:14px;padding:10px 12px;
+    }
+
+    /* FORM */
+    form{display:grid;gap:14px}
+    label{font-weight:600}
+    input,textarea{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#fff;
+      font-size:16px;outline:none
+    }
+    input:focus,textarea:focus{border-color:var(--orange-400);box-shadow:0 0 0 4px rgba(251,146,60,.2)}
+    .input-row{display:grid;gap:14px;grid-template-columns:repeat(3,1fr)}
+    .planos{grid-template-columns:repeat(2,1fr)}
+    .plan{border:2px solid transparent}
+    .plan.selected{border-color:var(--orange-400)}
+    .price{font-weight:800;font-size:22px}
+    .features{margin:10px 0 0 0;padding:0;list-style:none}
+    .features li{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+    .check{width:22px;height:22px;flex:0 0 22px;border-radius:999px;background:var(--orange-600);display:grid;place-items:center;color:#fff;font-weight:900}
+    .help{font-size:.9rem;color:var(--ink-3)}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+    /* PROVA SOCIAL */
+    .testis{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
+    .testi{background:#fff;border:1px solid #eee;border-radius:16px;padding:16px}
+    .testi .meta{display:flex;align-items:center;gap:10px;margin-top:10px}
+    .avatar{width:42px;height:42px;border-radius:999px;background:var(--orange-200);display:grid;place-items:center;color:#7c2d12;font-weight:800}
+    .logos{display:flex;gap:18px;flex-wrap:wrap;align-items:center;opacity:.85}
+    .logo-box{display:flex;align-items:center;justify-content:center;width:120px;height:46px;border:1px solid #eee;border-radius:10px;background:#fff}
+
+    /* “CAPAS” DAS REFERÊNCIAS (SVG cards) */
+    .refs-grid{display:grid;gap:16px;grid-template-columns:repeat(4,1fr)}
+    .ref-card{display:flex;flex-direction:column;gap:10px;align-items:center;background:#fff;border:1px solid #eee;border-radius:16px;padding:14px}
+    .ref-caption{font-size:.9rem;text-align:center}
+    .ref-card svg{max-width:120px;height:auto}
+
+    /* FAQ / RODAPÉ */
+    .faq details{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px}
+    footer{background:#fff;border-top:1px solid #f1f5f9;padding:32px 0}
+
+    /* RESPONSIVO */
+    @media (max-width: 1080px){ .testis{grid-template-columns:1fr 1fr} .refs-grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns:1fr}
+      .input-row{grid-template-columns:1fr}
+      .planos{grid-template-columns:1fr}
+      .testis{grid-template-columns:1fr}
+      .refs-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- =========================================
+       TOPO / LOGO
+       ========================================= -->
+  <header class="sticky">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <div class="logo-wrap">
+        <!-- 🔧 TROQUE O SRC PELA SUA LOGO -->
+        <img id="logo" class="logo" src="" alt="Logomarca MKT Flash" />
+        <strong>MKT Flash</strong>
+      </div>
+      <nav class="cta-row">
+        <a class="btn secondary" href="#planos">Planos</a>
+        <a class="btn" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20contratar%20um%20plano%20da%20MKT%20Flash">Contrate agora</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =========================================
+       HERO + GARANTIA 30 DIAS
+       ========================================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#9a3412" stroke-width="2"/><path d="M7 13l3 3 7-7" stroke="#f97316" stroke-width="2"/></svg>
+          Consultoria para pequenos negócios
+        </span>
+        <h1>Marketing que <span class="accent">traz clientes</span> — sem complicação.</h1>
+        <p>Escolha entre o <em>Plano Otimizado</em> (R$ 199, entrega em <b>até 24h</b>) e o <em>Plano com Especialista</em> (R$ 499, inclui <b>Plano de Negócio + Plano de Marketing</b> e <b>duas reuniões de 2h</b>; primeira agenda em <b>até 7 dias</b>).</p>
+
+        <div class="guarantee" title="Garantia incondicional">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1 3-6z" stroke="#f97316" stroke-width="2" fill="#fff7ed"/>
+          </svg>
+          <div><strong>Garantia 30 dias</strong> — devolvemos seu dinheiro <b>sem perguntas</b> se você não estiver satisfeito.</div>
+        </div>
+
+        <div class="cta-row" style="margin-top:12px">
+          <a class="btn" href="#planos">Ver planos</a>
+          <a class="btn secondary" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20come%C3%A7ar%20com%20a%20MKT%20Flash">Quero começar</a>
+        </div>
+
+        <div class="trust-badges">
+          <div class="badge"><span class="muted">Baseado em Kotler, Sharp, Cialdini e Godin</span></div>
+          <div class="badge"><span class="muted">Foco em aquisição e ROI</span></div>
+        </div>
+
+        <!-- 🔗 Link para sua autoavaliação hospedada em outra página -->
+        <p class="help" style="margin-top:8px">
+          Quer mapear seus pontos fortes e fracos? <a href="autoavaliacao.html">Faça nossa autoavaliação gratuita</a>.
+        </p>
+      </div>
+      <div class="card shadow">
+        <h3>Como funcionamos</h3>
+        <ol>
+          <li><strong>Briefing</strong> rápido para entender metas, público e orçamento.</li>
+          <li><strong>Plano</strong>: entrega do documento + check-list prático (<b>Otimizado</b> em até 24h).</li>
+          <li><strong>Aplicação</strong>: você executa ou fazemos junto — no <b>Com Especialista</b> (2 reuniões de 2h).</li>
+        </ol>
+        <div class="cta-row" style="margin-top:10px"><a class="btn" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20contratar%20um%20plano%20da%20MKT%20Flash">Quero meu plano</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       PROVA SOCIAL & AUTORIDADE (simulada)
+       ========================================= -->
+  <section class="container">
+    <h2 class="center">Resultados que inspiram confiança</h2>
+    <p class="center muted">Depoimentos e métricas simulados para layout — troque pelos seus cases reais quando tiver.</p>
+
+    <div class="testis">
+      <div class="testi shadow">
+        <p>“Aumentamos <b>+27% em novos leads</b> em 60 dias com o plano de aquisição da MKT Flash.”</p>
+        <div class="meta">
+          <div class="avatar">RA</div>
+          <div><strong>Renata Alves</strong><br><span class="muted">Bistrô de bairro • Recife</span></div>
+        </div>
+      </div>
+      <div class="testi shadow">
+        <p>“Saímos do zero para <b>ROAS 3,2</b> no 2º mês. O posicionamento fez toda diferença.”</p>
+        <div class="meta">
+          <div class="avatar">MT</div>
+          <div><strong>Mateus Trindade</strong><br><span class="muted">Loja de moda • Porto Alegre</span></div>
+        </div>
+      </div>
+      <div class="testi shadow">
+        <p>“Com as 2 reuniões 1:1 ganhamos foco. <b>Ticket médio +18%</b> com cross-sell estruturado.”</p>
+        <div class="meta">
+          <div class="avatar">CS</div>
+          <div><strong>Carla Souza</strong><br><span class="muted">Clínica estética • São Paulo</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="logos">
+        <div class="logo-box">Associação do Comércio Local</div>
+        <div class="logo-box">Portal Empreender</div>
+        <div class="logo-box">Brasil PME News</div>
+        <div class="logo-box">Sebrae Talks*</div>
+      </div>
+      <p class="help" style="margin-top:6px">* Placeholders para layout.</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       BENEFÍCIOS E PROVAS METODOLÓGICAS
+       ========================================= -->
+  <section class="container">
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="card shadow">
+        <h3>Por que nosso plano funciona</h3>
+        <div class="features">
+          <li class="benefit">
+            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><rect x="3" y="3" width="18" height="14" rx="3" ry="3" fill="#fff7ed" stroke="#f97316" stroke-width="2"/><path d="M3 17l4 4h10l4-4" stroke="#9a3412" stroke-width="2" fill="none"/></svg>
+            <div><strong>Kotler &amp; Keller</strong>: marketing holístico (STP, mix e relacionamento) como base do plano.</div>
+          </li>
+          <li class="benefit">
+            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/><path d="M7 12h10M12 7v10" stroke="#9a3412" stroke-width="2"/></svg>
+            <div><strong>Byron Sharp</strong>: crescer = aumentar <em>penetração</em> (double jeopardy). Priorizamos alcance e consistência.</div>
+          </li>
+          <li class="benefit">
+            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="M4 12l4 4 12-12" stroke="#f97316" stroke-width="2" fill="none"/><path d="M4 20h16" stroke="#9a3412" stroke-width="2"/></svg>
+            <div><strong>Cialdini</strong>: prova social, autoridade e escassez aplicadas com ética para aumentar conversões.</div>
+          </li>
+          <li class="benefit">
+            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2" fill="#fff7ed" stroke="#f97316" stroke-width="2"/><path d="M6 9h12M6 13h9" stroke="#9a3412" stroke-width="2"/></svg>
+            <div><strong>Seth Godin</strong>: foco na <em>menor audiência viável</em> para mensagens que realmente geram mudança.</div>
+          </li>
+        </div>
+        <p class="help">Fontes e leituras recomendadas abaixo — veja as “capas”.</p>
+      </div>
+
+      <div class="card shadow">
+        <h3>Vantagens de um marketing bem feito</h3>
+        <ul class="features">
+          <li><span class="check">✓</span><div><strong>Mais clientes</strong>: campanhas com alcance e frequência consistentes.</div></li>
+          <li><span class="check">✓</span><div><strong>ROI claro</strong>: CAC, LTV e conversões por canal acompanhados.</div></li>
+          <li><span class="check">✓</span><div><strong>Marca memorável</strong>: posicionamento simples, proposta de valor clara.</div></li>
+          <li><span class="check">✓</span><div><strong>Execução prática</strong>: plano aplicável em dias — não meses.</div></li>
+        </ul>
+        <div class="cta-row" style="margin-top:10px">
+          <a class="btn" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20contratar%20um%20plano%20da%20MKT%20Flash">Quero meu plano</a>
+          <a class="btn ghost" href="#garantia">Entenda a garantia</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       PLANOS
+       ========================================= -->
+  <section id="planos" class="container">
+    <h2 class="center">Escolha seu plano</h2>
+    <p class="center muted">Sem letra miúda. <b>Garantia incondicional de 30 dias</b> — devolução sem perguntas.</p>
+    <div class="grid planos">
+      <div class="card plan" data-plan="otimizado">
+        <h3>Plano de Negócio <span class="accent">Otimizado</span></h3>
+        <p class="muted">Melhores práticas e referências consagradas.</p>
+        <div class="price">R$ 199,00</div>
+        <p class="help">Entrega em <b>até 24 horas</b> após recebermos suas informações.</p>
+        <ul class="features">
+          <li><span class="check">✓</span><div>Proposta de valor e posicionamento</div></li>
+          <li><span class="check">✓</span><div>Plano de aquisição (canais, orçamento, metas)</div></li>
+          <li><span class="check">✓</span><div>Roteiro de conteúdo e provas</div></li>
+        </ul>
+        <div class="cta-row" style="margin-top:12px">
+          <button class="btn select-plan" onclick="window.location.href=\'https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20contratar%20o%20Plano%20Otimizado%20da%20MKT%20Flash\'">Contrate agora</button>
+        </div>
+        <p class="help">Coberto pela garantia de 30 dias — sem perguntas.</p>
+      </div>
+
+      <div class="card plan selected shadow" data-plan="especialista">
+        <h3>Plano <span class="accent">com Especialista</span></h3>
+        <p class="muted">Inclui <strong>Plano de Negócio + Plano de Marketing</strong> e <strong>duas reuniões de 2h</strong> com especialista MKT Flash.</p>
+        <div class="price">R$ 499,00</div>
+        <p class="help">Primeira reunião agendada em <b>até 7 dias</b> + entrega do plano em até 24h.</p>
+        <ul class="features">
+          <li><span class="check">✓</span><div>Imersão no negócio + benchmark local</div></li>
+          <li><span class="check">✓</span><div>Plano sob medida e cronograma de 90 dias</div></li>
+          <li><span class="check">✓</span><div>Setup de métricas e painel simples</div></li>
+          <li><span class="check">✓</span><div>Acompanhamento por 30 dias</div></li>
+        </ul>
+        <div class="cta-row" style="margin-top:12px">
+          <button class="btn select-plan" onclick="window.location.href=\'https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20contratar%20o%20Plano%20Otimizado%20da%20MKT%20Flash\'">Contrate agora</button>
+          <a class="btn secondary" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20falar%20com%20um%20especialista%20da%20MKT%20Flash">Quero falar com um especialista</a>
+        </div>
+        <p class="help">Coberto pela garantia de 30 dias — sem perguntas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       CHAMADA GARANTIA
+       ========================================= -->
+  <section id="garantia" class="container">
+    <div class="card shadow">
+      <h3>Garantia Incondicional de 30 Dias</h3>
+      <p>Se em até 30 dias você entender que o plano não é para você, devolvemos <b>100% do valor</b> — <b>sem perguntas</b>, sem burocracia.</p>
+      <div class="cta-row" style="margin-top:10px">
+        <a class="btn" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20contratar%20sem%20risco%20o%20plano%20da%20MKT%20Flash">Quero contratar sem risco</a>
+        <a class="btn secondary" href="#faq">Tirar dúvidas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       “CAPAS” DAS REFERÊNCIAS (IMAGENS SVG)
+       ========================================= -->
+  <section class="container">
+    <h2 class="center">As ideias por trás do nosso método</h2>
+    <p class="center muted">Imagens meramente ilustrativas (“capas” estilizadas). Os links abrem as páginas oficiais.</p>
+    <div class="refs-grid">
+      <!-- KOTLER & KELLER -->
+      <figure class="ref-card shadow">
+        <!-- “Capa” SVG estilizada -->
+        <svg viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kotler & Keller">
+          <rect x="0" y="0" width="140" height="180" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+          <rect x="12" y="22" width="116" height="136" fill="#ffffff" stroke="#fed7aa"/>
+          <text x="70" y="70" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">Marketing</text>
+          <text x="70" y="86" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">Management</text>
+          <text x="70" y="116" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#f97316">Kotler & Keller</text>
+        </svg>
+        <figcaption class="ref-caption">
+          <strong>Kotler &amp; Keller</strong> — Marketing Management<br>
+          <a href="https://www.pearson.com/en-us/subject-catalog/p/marketing-management/P200000007478/9780135890356" target="_blank" rel="noopener">Página oficial</a>
+        </figcaption>
+      </figure>
+
+      <!-- BYRON SHARP -->
+      <figure class="ref-card shadow">
+        <svg viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Byron Sharp">
+          <rect x="0" y="0" width="140" height="180" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+          <rect x="12" y="22" width="116" height="136" fill="#ffffff" stroke="#fed7aa"/>
+          <text x="70" y="72" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">How Brands</text>
+          <text x="70" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">Grow</text>
+          <text x="70" y="116" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#f97316">Byron Sharp</text>
+        </svg>
+        <figcaption class="ref-caption">
+          <strong>Byron Sharp</strong> — How Brands Grow<br>
+          <a href="https://marketingscience.info/how-brands-grow/" target="_blank" rel="noopener">Ehrenberg-Bass Institute</a>
+        </figcaption>
+      </figure>
+
+      <!-- CIALDINI -->
+      <figure class="ref-card shadow">
+        <svg viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Robert Cialdini">
+          <rect x="0" y="0" width="140" height="180" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+          <rect x="12" y="22" width="116" height="136" fill="#ffffff" stroke="#fed7aa"/>
+          <text x="70" y="72" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">Influence</text>
+          <text x="70" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">/ Persuasion</text>
+          <text x="70" y="116" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#f97316">Robert Cialdini</text>
+        </svg>
+        <figcaption class="ref-caption">
+          <strong>Robert Cialdini</strong> — Principles of Persuasion<br>
+          <a href="https://www.influenceatwork.com/7-principles-of-persuasion/" target="_blank" rel="noopener">Influence at Work</a>
+        </figcaption>
+      </figure>
+
+      <!-- SETH GODIN -->
+      <figure class="ref-card shadow">
+        <svg viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Seth Godin">
+          <rect x="0" y="0" width="140" height="180" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+          <rect x="12" y="22" width="116" height="136" fill="#ffffff" stroke="#fed7aa"/>
+          <text x="70" y="64" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">This is</text>
+          <text x="70" y="80" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#9a3412">Marketing</text>
+          <text x="70" y="116" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#f97316">Seth Godin</text>
+        </svg>
+        <figcaption class="ref-caption">
+          <strong>Seth Godin</strong> — This is Marketing<br>
+          <a href="https://www.penguinrandomhouse.com/books/600458/this-is-marketing-by-seth-godin/" target="_blank" rel="noopener">Penguin Random House</a>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- =========================================
+       FAQ
+       ========================================= -->
+  <section id="faq" class="container">
+    <h2 class="center">Dúvidas comuns</h2>
+    <div class="grid">
+      <div class="faq card">
+        <details>
+          <summary><strong>Quanto tempo para receber o plano?</strong></summary>
+          <p><b>Otimizado</b>: até 24h após o briefing. <b>Com Especialista</b>: primeira reunião em até 7 dias e o documento também é entregue em até 24h.</p>
+        </details>
+      </div>
+      <div class="faq card">
+        <details>
+          <summary><strong>O que eu recebo exatamente?</strong></summary>
+          <p>Documento com proposta de valor, posicionamento, plano de canais, orçamento, metas e check-list de execução por 90 dias. No <em>Com Especialista</em>, você também recebe o <b>Plano de Marketing</b> completo e duas reuniões 1:1 de 2h.</p>
+        </details>
+      </div>
+      <div class="faq card">
+        <details open>
+          <summary><strong>E se eu não gostar?</strong> <span class="pill">Garantia 30 dias</span></summary>
+          <p>Reembolso em até 30 dias a partir da compra. <b>Sem perguntas</b> e sem burocracia.</p>
+        </details>
+      </div>
+    </div>
+    <p class="center" style="margin-top:12px"><a class="btn" href="https://wa.me/5511947288394?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20gostaria%20de%20come%C3%A7ar%20agora%20com%20a%20MKT%20Flash">Quero começar agora</a></p></p>
+  </section>
+
+  <!-- =========================================
+       RODAPÉ
+       ========================================= -->
+  <footer>
+    <div class="container center">
+      <p class="muted">© <span id="year"></span> MKT Flash • Consultoria de Marketing para Pequenos Negócios</p>
+    </div>
+  </footer>
+
+  <!-- =========================================
+       SCRIPTS (PUROS)
+       ========================================= -->
+  <script>
+    // ============================================================
+    // CONFIGURAÇÃO: COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT WEB APP
+    // Ex.: const GAS_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+    // ============================================================
+    const GAS_URL = "COLE_AQUI_SUA_URL_WEB_APP"; // 🔧 OBRIGATÓRIO: substitua antes de publicar
+
+    // Ano rodapé
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Máscara simples de WhatsApp (BR)
+    const whatsInput = document.getElementById('whats');
+    whatsInput.addEventListener('input', (e)=>{
+      let v = e.target.value.replace(/\D/g,'').slice(0,11);
+      if(v.length>2 && v.length<=7) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+      else if(v.length>7 && v.length<=11) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+      e.target.value = v;
+    });
+
+    // Seleção de plano via cards
+    const planCards = document.querySelectorAll('.plan');
+    const planoHidden = document.getElementById('plano');
+    document.querySelectorAll('.select-plan').forEach(btn=>{
+      btn.addEventListener('click', (ev)=>{
+        const card = ev.target.closest('.plan');
+        planCards.forEach(c=>c.classList.remove('selected'));
+        card.classList.add('selected');
+        // define "otimizado" ou "especialista"
+        if(!planoHidden){
+          const hidden = document.createElement('input');
+          hidden.type = 'hidden'; hidden.id = 'plano'; hidden.name = 'plano';
+          document.getElementById('leadForm').appendChild(hidden);
+        }
+        document.getElementById('plano').value = card.dataset.plan;
+        document.getElementById('form').scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+
+    // UTM / contexto de origem
+    function getUTM(){
+      const p = new URLSearchParams(location.search);
+      return {
+        utm_source: p.get('utm_source')||'',
+        utm_medium: p.get('utm_medium')||'',
+        utm_campaign: p.get('utm_campaign')||'',
+        utm_term: p.get('utm_term')||'',
+        utm_content: p.get('utm_content')||''
+      };
+    }
+
+    // Validação (LGPD removido)
+    const form = document.getElementById('leadForm');
+    const statusEl = document.getElementById('status');
+    function validateRequired(){
+      const nome = document.getElementById('nome');
+      const email = document.getElementById('email');
+      const whats = document.getElementById('whats');
+      if(!nome.value.trim()){nome.focus();return 'Informe seu nome';}
+      if(!email.value.trim() || !/^\S+@\S+\.\S+$/.test(email.value)){email.focus();return 'Informe um e-mail válido';}
+      if(!whats.value.trim() || whats.value.replace(/\D/g,'').length<10){whats.focus();return 'Informe um WhatsApp válido';}
+      return '';
+    }
+
+    // Submit: envia para GAS (grava planilha + emails)
+    form.addEventListener('submit', async (ev)=>{
+      ev.preventDefault();
+      statusEl.textContent = '';
+      const err = validateRequired();
+      if(err){ statusEl.textContent = err; statusEl.style.color='var(--danger)'; return; }
+
+      // 🔎 Diagnóstico opcional vindo de outra página
+      const diagField = document.getElementById('diagJson')?.value || "";
+      let diagnostico = null;
+      try{ diagnostico = diagField ? JSON.parse(diagField) : null; }catch(_){ diagnostico = null; }
+
+      const payload = {
+        nome: document.getElementById('nome').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        whats: document.getElementById('whats').value.trim(),
+        plano: document.getElementById('plano')?.value || 'especialista',
+        mensagem: document.getElementById('msg').value.trim(),
+        diagnostico, // pode ser null
+        guarantee_days: 30,
+        context: {
+          userAgent: navigator.userAgent,
+          href: location.href,
+          utm: getUTM()
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      if(!GAS_URL || GAS_URL.startsWith("COLE_AQUI")){
+        alert("Configure a URL do Google Apps Script Web App no código antes de publicar.");
+        return;
+      }
+
+      try{
+        statusEl.textContent = 'Enviando...';
+        statusEl.style.color = 'var(--ink-3)';
+        const res = await fetch(GAS_URL, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(()=>({ok:false}));
+        if(data && data.ok){
+          statusEl.textContent = 'Pronto! Enviado com sucesso — veja seu e-mail 😉';
+          statusEl.style.color = 'var(--ok)';
+          form.reset();
+        }else{
+          statusEl.textContent = 'Não foi possível enviar agora. Tente novamente em instantes.';
+          statusEl.style.color = 'var(--danger)';
+        }
+      }catch(e){
+        statusEl.textContent = 'Falha de conexão. Tente novamente.';
+        statusEl.style.color = 'var(--danger)';
+      }
+    });
+  </script>
+
+  <!-- ============================================================
+       EXEMPLO GOOGLE APPS SCRIPT (SEM LGPD; COM DIAGNÓSTICO OPCIONAL)
+       PASSOS:
+       1) Crie uma Planilha (aba "Leads").
+       2) Apps Script: cole e ajuste ID_DA_PLANILHA, EMAIL_EQUIPE, LINK_WHATS_APP.
+       3) Publique como Web App e cole a URL em GAS_URL acima.
+  ================================================================
+  /*
+  const ID_DA_PLANILHA = "COLE_AQUI_O_ID_DA_SUA_PLANILHA";
+  const NOME_ABA = "Leads";
+  const EMAIL_EQUIPE = "flashmkt0@gmail.com";
+  const LINK_WHATS_APP = "https://wa.me/55XXXXXXXXXXX?text=Ol%C3%A1%20vim%20da%20landing%20MKT%20Flash";
+
+  function doPost(e){
+    try{
+      const data = JSON.parse(e.postData.contents);
+      const ss = SpreadsheetApp.openById(ID_DA_PLANILHA);
+      const sh = ss.getSheetByName(NOME_ABA) || ss.insertSheet(NOME_ABA);
+      if(sh.getLastRow()===0){
+        sh.appendRow(["timestamp","nome","email","whats","plano","mensagem","diagnostico_json","utm_source","utm_medium","utm_campaign","utm_term","utm_content","userAgent","href","guarantee_days"]);
+      }
+      const d = data.diagnostico || null;
+      const utm = (data.context && data.context.utm) || {};
+      sh.appendRow([
+        new Date(), data.nome, data.email, data.whats, data.plano, data.mensagem, JSON.stringify(d),
+        utm.utm_source||"",utm.utm_medium||"",utm.utm_campaign||"",utm.utm_term||"",utm.utm_content||"",
+        (data.context && data.context.userAgent)||"", (data.context && data.context.href)||"",
+        data.guarantee_days||30
+      ]);
+
+      // Tabela de pilares (se houver)
+      let tabela = "<p>Diagnóstico não informado (pode ser preenchido via autoavaliação).</p>";
+      let maiorGap = "não informado";
+      let media = "—";
+      if(d && d.scores){
+        const scores = d.scores;
+        const linhas = Object.keys(scores).map(p=> `<tr><td style="padding:6px 10px;border:1px solid #eee">${p}</td><td style="padding:6px 10px;border:1px solid #eee;text-align:center"><b>${scores[p]}</b></td></tr>`).join("");
+        tabela = `<table style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:14px">${linhas}</table>`;
+        maiorGap = d.gap || "—";
+        media = d.media || "—";
+      }
+
+      // E-mail para equipe
+      const resumoEquipe = `
+        <p><b>Novo lead</b> — ${data.nome}</p>
+        <p><b>Plano:</b> ${data.plano}</p>
+        <p><b>Maior gap:</b> ${maiorGap} | <b>Média:</b> ${media}</p>
+        <p><b>Mensagem:</b> ${data.mensagem||"—"}</p>
+        <p><b>Pilares</b>:</p>${tabela}
+        <hr>
+        <p><b>Garantia</b>: ${data.guarantee_days||30} dias (sem perguntas)</p>
+        <p>UTM: ${utm.utm_source||"-"} / ${utm.utm_medium||"-"} / ${utm.utm_campaign||"-"}</p>
+      `;
+      MailApp.sendEmail({ to: EMAIL_EQUIPE, subject: "Novo lead • MKT Flash", htmlBody: resumoEquipe });
+
+      // E-mail automático para o cliente
+      const resumoCliente = `
+        <p>Olá, ${data.nome}!</p>
+        <p>Obrigado por entrar em contato com a <b>MKT Flash</b>. Recebemos seus dados e já vamos preparar seu plano.</p>
+        <p><b>Garantia incondicional:</b> você tem ${data.guarantee_days||30} dias para pedir seu reembolso <b>sem perguntas</b>, se não ficar satisfeito.</p>
+        <p>Se preferir, fale conosco agora no WhatsApp: <a href="${LINK_WHATS_APP}" target="_blank">clique aqui</a></p>
+        <p>Abraços,<br>MKT Flash</p>
+      `;
+      MailApp.sendEmail({ to: data.email, subject: "Recebemos seu pedido • MKT Flash", htmlBody: resumoCliente });
+
+      return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+    }catch(err){
+      return ContentService.createTextOutput(JSON.stringify({ok:false,error:String(err)})).setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+  */
+  -->
+</body>
+</html>
